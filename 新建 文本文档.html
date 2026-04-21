@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>2BTI · 动漫人格测试 | 二次元灵魂觉醒</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a0b2e 0%, #0f0719 100%);
+            font-family: 'Segoe UI', 'Poppins', 'Noto Sans CJK SC', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+            color: #f3eefc;
+            padding: 1.5rem 1rem 3rem;
+            min-height: 100vh;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 头部 */
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #FFB347, #FF6B6B, #A855F7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+
+        .hero .sub {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 8px;
+            border-top: 1px dashed rgba(255,180,100,0.4);
+            display: inline-block;
+            padding-top: 6px;
+        }
+
+        .progress-area {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(4px);
+            border-radius: 60px;
+            padding: 8px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid rgba(255,180,100,0.3);
+        }
+
+        .progress-text {
+            background: #ff9f4a30;
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+
+        .reset-btn {
+            background: none;
+            border: 1px solid #ffaa66;
+            color: #ffcc99;
+            padding: 5px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: #ffaa6633;
+            color: white;
+        }
+
+        /* 题目卡片 */
+        .questions-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .quiz-card {
+            background: rgba(22, 12, 40, 0.75);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 1.2rem 1.2rem 1rem;
+            border: 1px solid rgba(255, 160, 80, 0.3);
+            box-shadow: 0 10px 25px -8px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease;
+        }
+
+        .quiz-card:hover {
+            border-color: rgba(255, 170, 100, 0.6);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-left: 8px;
+            border-left: 4px solid #ff9966;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .option {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 60px;
+            border: 1px solid rgba(255, 200, 150, 0.3);
+            transition: all 0.2s;
+        }
+
+        .option label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 18px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 60px;
+        }
+
+        .option input {
+            accent-color: #ff9966;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .option:has(input:checked) {
+            background: linear-gradient(95deg, #ff996622, #ff664422);
+            border-color: #ffaa66;
+            box-shadow: 0 0 6px #ffaa6670;
+        }
+
+        /* 提交按钮 */
+        .submit-area {
+            text-align: center;
+            margin: 30px 0 20px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(110deg, #ff884d, #ff5e7c);
+            border: none;
+            padding: 14px 32px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 60px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+            transition: 0.2s;
+            width: 80%;
+            max-width: 280px;
+            letter-spacing: 2px;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* 结果卡片 */
+        .result-card {
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 1.8rem;
+            border: 2px solid #ffb56b;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .result-code {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFD966, #FF9966);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 4px;
+        }
+
+        .result-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 12px 0 8px;
+        }
+
+        .result-character {
+            font-size: 1.2rem;
+            background: #ffaa4422;
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 40px;
+            margin: 10px 0;
+        }
+
+        .result-desc {
+            text-align: left;
+            line-height: 1.6;
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(255,255,240,0.05);
+            border-radius: 32px;
+            font-style: normal;
+        }
+
+        .retest-btn {
+            background: none;
+            border: 2px solid #ffaa77;
+            color: #ffccaa;
+            padding: 8px 24px;
+            border-radius: 40px;
+            margin-top: 24px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .retest-btn:hover {
+            background: #ffaa7733;
+        }
+
+        /* 模态框 (平分弹窗) */
+        .modal-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        .modal-mask.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-container {
+            background: #261c3a;
+            max-width: 320px;
+            width: 85%;
+            border-radius: 48px;
+            padding: 1.8rem 1.5rem;
+            text-align: center;
+            border: 2px solid #ffb36b;
+            box-shadow: 0 20px 35px black;
+        }
+
+        .modal-container p {
+            font-size: 1.2rem;
+            margin-bottom: 1.8rem;
+            font-weight: 500;
+        }
+
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            background: #2f2348;
+            border: 1px solid #ffaa66;
+            padding: 10px;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .modal-btn:active {
+            background: #ffaa6644;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            opacity: 0.5;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 550px) {
+            .option {
+                min-width: 100%;
+            }
+            .question-text {
+                font-size: 1rem;
+            }
+            .result-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>⚡ 2BTI 动漫人格测试 ⚡</h1>
+        <div class="sub">Anime Personality Type Indicator · 二次元灵魂觉醒</div>
+    </div>
+    <div class="progress-area">
+        <span>✨ 灵魂律动测试</span>
+        <span class="progress-text" id="answeredCounter">0 / 16 已觉醒</span>
+        <button class="reset-btn" id="globalResetBtn">🌊 重置一切</button>
+    </div>
+
+    <div id="questionsContainer" class="questions-panel"></div>
+
+    <div class="submit-area">
+        <button class="submit-btn" id="submitTest">🔮 解析灵魂代码 🔮</button>
+    </div>
+
+    <div id="resultArea"></div>
+    <footer>凭第一直觉 · 解锁你的本命二次元人格</footer>
+</div>
+
+<!-- 弹窗模板 -->
+<div id="tieModal" class="modal-mask">
+    <div class="modal-container">
+        <p id="modalMessage">两种力量正在对峙</p>
+        <div class="modal-buttons" id="modalButtons"></div>
+    </div>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // 1. 题库数据（严格遵照文档，16题，含权重）
+    // --------------------------------------------------------------
+    const QUESTIONS = [
+        // 维度1 燃/静 (soul)
+        { id: 1, text: "【觉醒时刻】面对注定失败的绝局，你的灵魂火种会？", dimension: "soul", weight: 1, options: [{ text: "哪怕燃尽生命也要挥出最后一拳，咆哮着逆转因果！", trait: "R" },{ text: "垂下眼睑，在寂静中计算那万分之一的胜机。", trait: "J" }] },
+        { id: 2, text: "【出场氛围】你踏入战场（社交场合）时，自带的BGM是？", dimension: "soul", weight: 1, options: [{ text: "电吉他轰鸣，瞬间点燃全场燥点。", trait: "R" },{ text: "清冷钢琴单音，空气随之凝固降温。", trait: "J" }] },
+        { id: 3, text: "【情绪释放】看到珍视的事物被毁掉，你会？", dimension: "soul", weight: 1, options: [{ text: "怒意化作实质的灵压，直接爆发。", trait: "R" },{ text: "眼神变得极其冰冷，那是绝对零度的肃杀。", trait: "J" }] },
+        { id: 4, text: "【核心权重·1.5分】你的生命底色是？", dimension: "soul", weight: 1.5, options: [{ text: "永恒跃动的烈焰，拒绝平庸。", trait: "R" },{ text: "深邃无波的古潭，万物不侵。", trait: "J" }] },
+        // 维度2 直/柔 (speech)  注意柔 trait = "R" (柔) 与燃字母相同但是不同维度变量
+        { id: 5, text: "【交涉原则】面对同伴的软弱，你的“言灵”会是？", dimension: "speech", weight: 1, options: [{ text: "像利剑般直接刺破谎言：“清醒点，这就是现实！”", trait: "Z" },{ text: "像微风拂过湖面：“没关系的，我会陪你一起承担。”", trait: "R" }] },
+        { id: 6, text: "【告白倾向】如果要传达心意，你会选择？", dimension: "speech", weight: 1, options: [{ text: "在落日下大声喊出那句台词，不留退路。", trait: "Z" },{ text: "编写一份藏在字里行间的暗号，静候对方察觉。", trait: "R" }] },
+        { id: 7, text: "【冲突处理】与宿敌产生分歧时，你会？", dimension: "speech", weight: 1, options: [{ text: "废话少说，手底下见真章。", trait: "Z" },{ text: "试图窥探对方背后的悲剧，寻找和解的可能。", trait: "R" }] },
+        { id: 8, text: "【核心权重·1.5分】你的待人之道是？", dimension: "speech", weight: 1.5, options: [{ text: "极致的真实，哪怕伴随着痛楚。", trait: "Z" },{ text: "极致的慈悲，哪怕需要背负伪装。", trait: "R" }] },
+        // 维度3 谋/随 (causality)
+        { id: 9, text: "【战前准备】在踏入魔王城（开启新项目）前，你会？", dimension: "causality", weight: 1, options: [{ text: "脑内模拟一万种突发状况，并备好Plan B到Z。", trait: "M" },{ text: "整理好发型，推开门说一句：“哟，我来了。”", trait: "S" }] },
+        { id: 10, text: "【秩序观】你眼中的世界运行规律是？", dimension: "causality", weight: 1, options: [{ text: "一场精密宏大的棋局，每一步都有其定数。", trait: "M" },{ text: "一场混沌无序的漂流，有趣才是唯一的坐标。", trait: "S" }] },
+        { id: 11, text: "【抉择逻辑】决定胜负的关键时刻，你更相信？", dimension: "causality", weight: 1, options: [{ text: "缜密的逻辑推演，那是通往唯一的真相。", trait: "M" },{ text: "那一瞬间捕捉到的风向，也就是所谓的直觉。", trait: "S" }] },
+        { id: 12, text: "【核心权重·1.5分】你更享受哪种掌控感？", dimension: "causality", weight: 1.5, options: [{ text: "幕后黑手般的运筹帷幄。", trait: "M" },{ text: "吟游诗人般的自由自在。", trait: "S" }] },
+        // 维度4 护/独 (contract)
+        { id: 13, text: "【守护定义】你的盾牌会为了谁而举起？", dimension: "contract", weight: 1, options: [{ text: "为了身后那群名为“羁绊”的笨蛋们。", trait: "H" },{ text: "为了守护内心那片不被任何人侵扰的净土。", trait: "D" }] },
+        { id: 14, text: "【相处姿态】你更向往的生活状态是？", dimension: "contract", weight: 1, options: [{ text: "充满欢笑与喧嚣的公会大厅。", trait: "H" },{ text: "极寒之地中，那座只属于自己的高塔。", trait: "D" }] },
+        { id: 15, text: "【牺牲逻辑】为了达成目的，你能够舍弃？", dimension: "contract", weight: 1, options: [{ text: "牺牲自我的安稳，只要他们能活下去。", trait: "H" },{ text: "斩断不必要的社会连接，追求纯粹的强大。", trait: "D" }] },
+        { id: 16, text: "【核心权重·1.5分】你的灵魂属于？", dimension: "contract", weight: 1.5, options: [{ text: "众生与契约。", trait: "H" },{ text: "自我与虚空。", trait: "D" }] }
+    ];
+
+    // 16型人格映射表 (4位代码 -> 结果)
+    const PERSONALITY_MAP = {
+        "RZMH": { title: "红莲之意志·契约之盾", character: "鸣人 / 炭治郎", desc: "“我的背后没有退路，因为我要守护的人就在那里！”你是行走的人间烈焰，血管中流淌着滚烫的意志。绝不妥协、永不言败，以炽热之心撕裂黑暗。你是天生的领袖，以直爽破迷茫，以谋略定胜负，以守护为信仰。若世界坠入永夜，你便是那道燃尽绝望的终极红莲！" },
+        "RZMD": { title: "孤刃战魂·不羁之霸", character: "利威尔 / 雷狮", desc: "“弱者才需要抱团取暖，强者自能独行天下。”你热血、锐利、霸道，拥有无人能及的行动力与决断力。你不屑伪装，不恋繁华，只信自己手中的力量。孤身亦可成军，独行即是巅峰，用直爽与谋略，在乱世中走出属于自己的王者之路。" },
+        "RZSH": { title: "烈阳同伴·烟火之魂", character: "坂田银时 / 我妻善逸", desc: "“开心就笑，难过就闹，想守护就直接冲上去！”你像永不落山的小太阳，直爽、热烈、随性又温柔。没有架子，不玩心机，关键时刻却比谁都可靠。你是人群中最耀眼的烟火，温暖又治愈，用直白的善意，照亮身边每一个人的旅途。" },
+        "RZSD": { title: "风野浪客·无缚之灵", character: "太宰治 / 卡卡西", desc: "“世界太无聊，不如随性走一趟。”你热爱自由，讨厌束缚，话直心真，却习惯独来独往。看似漫不经心，实则看透一切，随性而为却不肆意妄为，直爽坦率却不鲁莽冲动。你如风一般，来过、惊艳过，却从不属于任何地方，活成了最自由的模样。" },
+        "RRMH": { title: "柔光领路人·温炎之君", character: "欧尔麦特 / 巴卫", desc: "“我可以不强，但我必须保护你。”你热血却温柔，强大却慈悲，待人委婉共情，做事有谋有略。用最柔软的方式，做最坚定的守护；用最温暖的言语，给最坚实的依靠。你是黑暗里的光，寒冬里的暖，让人安心，让人信赖，是天生的温柔领袖。" },
+        "RRMD": { title: "幽冥之影·极寒之理", character: "蓝染惣右介 / 塞巴斯蒂安", desc: "“世界不过是一场棋局，而我，是执棋人。”你外表温润如玉，内心深不可测，待人温柔委婉，做事缜密布局。以温柔为假面，以谋略为利刃，独行于光影之间，不恋羁绊，不慕繁华。不需要同伴，因为你本身即是神明，用自己的方式，掌控着世间因果。" },
+        "RRSH": { title: "星暖同行·人间小治愈", character: "娜美 / 井上织姬", desc: "“只要大家都开心，我怎样都没关系。”你像星星一样温暖明亮，温柔、鲜活、随性又真诚，待人委婉共情，做事不被束缚。你用最柔软的力量，治愈身边所有人，不张扬、不炫耀，却成为团队里不可或缺的小太阳，用细节与善意，守护着身边的羁绊。" },
+        "RRSD": { title: "月隐独行·温柔之寂", character: "夏目贵志 / 楪祈", desc: "“我安静活着，不打扰世界，也不被世界打扰。”你温柔、治愈、喜欢独处，内心干净得像月光，待人委婉共情，做事随性而为。不争不抢，不卑不亢，默默守护着自己的一方天地，也悄悄成为别人生命里的光，清冷又温柔，孤独却不孤单。" },
+        "JZMH": { title: "寒锋守护者·冷静之盾", character: "宇智波鼬 / 伏黑惠", desc: "“话不多说，但我会守住一切。”你外表清冷、话少心稳，冷静、理智、极度可靠，说话直接不绕弯，做事缜密有谋。默默背负一切，默默守护所有重要的人，不张扬、不邀功，用冷静与力量，筑起一道坚不可摧的盾牌，是最让人安心的存在。" },
+        "JZMD": { title: "苍蓝之瞳·真理观测者", character: "五条悟 / 江户川乱步", desc: "“没关系，因为我是无敌的。”你拥有洞察世界的双眼，冷静、强大、绝对理智，说话直接锐利，做事缜密布局，习惯独来独往。世间万物在你眼中皆为逻辑，人情世故不过是劣质的公式，你站在世界顶端，独自品尝智慧的孤独，却也独自守护着自己的真理。" },
+        "JZSH": { title: "冷焰守护者·外冷内热", character: "云雀恭弥 / 市丸银", desc: "“别碰我在乎的人，其余随便你。”你外表冷淡、说话直接、不爱热闹，冷静内敛却藏着热血，做事随性却有底线。不擅长表达温柔，却会默默守护重要的人；不喜欢抱团，却会在关键时刻挺身而出。冷漠是外壳，温柔是内核，是外冷内热的孤独守护者。" },
+        "JZSD": { title: "清野智者·自在独行", character: "江户川柯南 / 爱德华", desc: "“世界很吵，我只想安静追寻真相。”你聪明、冷静、喜欢思考，不爱社交，却拥有顶尖智慧，说话直接不绕弯，做事随性却不失缜密。不依赖他人，不迎合世俗，随性而活，独行而强，在自己的世界里，追寻着属于自己的真理与答案。" },
+        "JRMH": { title: "静柔军师·深渊之暖", character: "杀老师 / 栗山未来", desc: "“我来布局，我来守护，一切有我。”你温柔、冷静、通透、有谋略，外表清冷内敛，待人委婉共情，做事缜密规划，重视羁绊与守护。习惯默默守护一切，不张扬、不炫耀，外表安静，内心强大到令人心疼，用温柔与智慧，守护着身边所有珍视的人。" },
+        "JRMD": { title: "寒月谋者·孤独之弈", character: "鲁路修 / 渚", desc: "“这世界欠温柔，那我便以谋定天下。”你清冷、温柔、擅长布局，冷静内敛，待人委婉共情，做事缜密有谋，习惯独来独往。为了信仰，可负天下，不负心之所向，在孤独中运筹帷幄，用温柔的假面，藏起内心的坚定与孤独。" },
+        "JRSH": { title: "默守微光·无声之暖", character: "祢豆子 / 平泽忧", desc: "“我不擅长说话，但我会用一生守护。”你温柔、安静、低调、随性，冷静内敛，待人委婉共情，做事随性而为，重视羁绊，习惯默默付出。像微光一样，不耀眼，却足够温暖一生，不擅长表达，却能用细节与行动，守护着身边的人。" },
+        "JRSD": { title: "月食之刻·悲剧的温柔", character: "金木研", desc: "“错的不是我，是这个世界。”你在深渊中开出自花，温柔包裹伤痕，随性掩饰痛苦，冷静内敛，待人委婉共情，做事随性而为，习惯独来独往。不属于任何阵营，却成为无数人的救赎。你是月光，照亮深渊，却拒绝被任何人占有。" }
+    };
+
+    // 存储用户答案 { questionId: "选中的trait" }
+    let userAnswers = JSON.parse(localStorage.getItem("2BTI_answers")) || {};
+    // 避免重复提交锁
+    let isProcessing = false;
+
+    // 辅助函数: 更新UI已完成数量
+    function updateProgress() {
+        const answered = Object.keys(userAnswers).length;
+        document.getElementById("answeredCounter").innerText = `${answered} / 16 已觉醒`;
+    }
+
+    // 渲染全部题目 (保留已选状态)
+    function renderQuestions() {
+        const container = document.getElementById("questionsContainer");
+        container.innerHTML = "";
+        QUESTIONS.forEach(q => {
+            const card = document.createElement("div");
+            card.className = "quiz-card";
+            const questionDiv = document.createElement("div");
+            questionDiv.className = "question-text";
+            questionDiv.innerText = q.text;
+            card.appendChild(questionDiv);
+            const optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+            q.options.forEach(opt => {
+                const optDiv = document.createElement("div");
+                optDiv.className = "option";
+                const radioId = `q_${q.id}_${opt.trait}`;
+                const isChecked = (userAnswers[q.id] === opt.trait);
+                const input = document.createElement("input");
+                input.type = "radio";
+                input.name = `question_${q.id}`;
+                input.value = opt.trait;
+                input.id = radioId;
+                if (isChecked) input.checked = true;
+                input.addEventListener("change", (e) => {
+                    if (e.target.checked) {
+                        userAnswers[q.id] = opt.trait;
+                        localStorage.setItem("2BTI_answers", JSON.stringify(userAnswers));
+                        updateProgress();
+                    }
+                });
+                const label = document.createElement("label");
+                label.htmlFor = radioId;
+                label.innerText = opt.text;
+                optDiv.appendChild(input);
+                optDiv.appendChild(label);
+                optionsDiv.appendChild(optDiv);
+            });
+            card.appendChild(optionsDiv);
+            container.appendChild(card);
+        });
+        updateProgress();
+    }
+
+    // 重置全部
+    function resetAll() {
+        userAnswers = {};
+        localStorage.removeItem("2BTI_answers");
+        renderQuestions();
+        document.getElementById("resultArea").innerHTML = "";
+        isProcessing = false;
+    }
+
+    // 弹窗promise化 (处理平分)
+    function showTieDialog(dimensionKey, leftName, leftLetter, rightName, rightLetter) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById("tieModal");
+            const msg = document.getElementById("modalMessage");
+            const btnContainer = document.getElementById("modalButtons");
+            msg.innerHTML = `⚖️ 检测到你体内的两种力量正在对峙 ⚖️<br>请选择你内心更渴望成为的一方。`;
+            btnContainer.innerHTML = "";
+            const leftBtn = document.createElement("button");
+            leftBtn.className = "modal-btn";
+            leftBtn.innerText = `我更渴望成为「${leftName}」型人格 (${leftLetter})`;
+            leftBtn.onclick = () => {
+                closeModal();
+                resolve(leftLetter);
+            };
+            const rightBtn = document.createElement("button");
+            rightBtn.className = "modal-btn";
+            rightBtn.innerText = `我更渴望成为「${rightName}」型人格 (${rightLetter})`;
+            rightBtn.onclick = () => {
+                closeModal();
+                resolve(rightLetter);
+            };
+            btnContainer.appendChild(leftBtn);
+            btnContainer.appendChild(rightBtn);
+            modal.classList.add("active");
+            function closeModal() {
+                modal.classList.remove("active");
+            }
+        });
+    }
+
+    // 核心计分 + 平分弹窗处理 (异步)
+    async function computeFinalType() {
+        // 先检查是否所有题目都已选
+        const totalQuestions = QUESTIONS.length;
+        if (Object.keys(userAnswers).length !== totalQuestions) {
+            alert(`请先完成全部16道灵魂觉醒题！ (当前已完成 ${Object.keys(userAnswers).length}/16)`);
+            return null;
+        }
+
+        // 初始化分数结构
+        let scores = {
+            soul: { R: 0, J: 0 },
+            speech: { Z: 0, R: 0 },   // R 代表柔
+            causality: { M: 0, S: 0 },
+            contract: { H: 0, D: 0 }
+        };
+
+        // 累加分数
+        for (let q of QUESTIONS) {
+            const selectedTrait = userAnswers[q.id];
+            if (!selectedTrait) continue;
+            const dim = q.dimension;
+            const weight = q.weight;
+            if (scores[dim] && scores[dim][selectedTrait] !== undefined) {
+                scores[dim][selectedTrait] += weight;
+            }
+        }
+
+        // 收集需要平分的维度
+        let tieDimensions = [];
+        // 维度映射信息
+        const dimMeta = {
+            soul: { leftName: "燃", leftLetter: "R", rightName: "静", rightLetter: "J", leftScoreKey: "R", rightScoreKey: "J" },
+            speech: { leftName: "直", leftLetter: "Z", rightName: "柔", rightLetter: "R", leftScoreKey: "Z", rightScoreKey: "R" },
+            causality: { leftName: "谋", leftLetter: "M", rightName: "随", rightLetter: "S", leftScoreKey: "M", rightScoreKey: "S" },
+            contract: { leftName: "护", leftLetter: "H", rightName: "独", rightLetter: "D", leftScoreKey: "H", rightScoreKey: "D" }
+        };
+
+        for (let dim of ["soul", "speech", "causality", "contract"]) {
+            const leftVal = scores[dim][dimMeta[dim].leftScoreKey];
+            const rightVal = scores[dim][dimMeta[dim].rightScoreKey];
+            if (Math.abs(leftVal - rightVal) < 0.001) {  // 相等则平分
+                tieDimensions.push(dim);
+            }
+        }
+
+        let finalLetters = {
+            soul: null,
+            speech: null,
+            causality: null,
+            contract: null
+        };
+
+        // 先处理非平分维度: 高分直接确定
+        for (let dim of ["soul", "speech", "causality", "contract"]) {
+            if (!tieDimensions.includes(dim)) {
+                const leftVal = scores[dim][dimMeta[dim].leftScoreKey];
+                const rightVal = scores[dim][dimMeta[dim].rightScoreKey];
+                finalLetters[dim] = leftVal > rightVal ? dimMeta[dim].leftLetter : dimMeta[dim].rightLetter;
+            }
+        }
+
+        // 处理平分维度 (顺序弹窗)
+        for (let dim of tieDimensions) {
+            const meta = dimMeta[dim];
+            const chosen = await showTieDialog(dim, meta.leftName, meta.leftLetter, meta.rightName, meta.rightLetter);
+            finalLetters[dim] = chosen;
+        }
+
+        // 拼接灵魂代码: 顺序 soul -> speech -> causality -> contract
+        const code = finalLetters.soul + finalLetters.speech + finalLetters.causality + finalLetters.contract;
+        return code;
+    }
+
+    // 展示结果
+    function showResult(code) {
+        const resultData = PERSONALITY_MAP[code];
+        if (!resultData) {
+            // 防御, 理论上全覆盖
+            console.warn("未找到人格映射:", code);
+            document.getElementById("resultArea").innerHTML = `<div class="result-card">⚠️ 灵魂代码 ${code} 异常，请联系命运之书</div>`;
+            return;
+        }
+        const html = `
+            <div class="result-card">
+                <div class="result-code">⚔️ ${code} ⚔️</div>
+                <div class="result-title">✨ ${resultData.title} ✨</div>
+                <div class="result-character">🎭 代表角色 · ${resultData.character}</div>
+                <div class="result-desc">${resultData.desc}</div>
+                <button class="retest-btn" id="retestFromResult">🔄 轮回重启 · 重新测试</button>
+            </div>
+        `;
+        document.getElementById("resultArea").innerHTML = html;
+        const retestBtn = document.getElementById("retestFromResult");
+        if (retestBtn) retestBtn.addEventListener("click", () => { resetAll(); });
+        // 滚动到结果
+        document.getElementById("resultArea").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // 主提交逻辑
+    async function onSubmit() {
+        if (isProcessing) return;
+        isProcessing = true;
+        const submitBtn = document.getElementById("submitTest");
+        submitBtn.disabled = true;
+        submitBtn.innerText = "✨ 灵魂解析中 ✨";
+        try {
+            const code = await computeFinalType();
+            if (code) {
+                showResult(code);
+                // 可选存储结果不重置答案，但是保留答案方便查看
+            }
+        } catch (err) {
+            console.error(err);
+            alert("命运出现波动，请重试");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "🔮 解析灵魂代码 🔮";
+            isProcessing = false;
+        }
+    }
+
+    // 绑定事件 & 初始化
+    function init() {
+        renderQuestions();
+        document.getElementById("submitTest").addEventListener("click", onSubmit);
+        document.getElementById("globalResetBtn").addEventListener("click", () => resetAll());
+        // 如果有结果残留展示没有影响
+    }
+    init();
+</script>
+</body>
+</html>

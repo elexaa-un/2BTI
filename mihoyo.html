@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>MYTI · 米哈游人格测试 | 旅者之铭2.0</title>
+    <!-- Font Awesome 6 装饰图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js 轻量雷达图 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0b0719 0%, #1a1333 100%);
+            font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, -apple-system, 'Noto Sans CJK SC', sans-serif;
+            color: #f0eef7;
+            padding: 1.5rem 1rem 3rem;
+            min-height: 100vh;
+        }
+
+        /* 星空特效 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 80px 200px, #ffd966, rgba(0, 0, 0, 0));
+            background-repeat: repeat;
+            background-size: 200px 200px, 300px 300px;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #FFD966, #E6B422, #C47E2E);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(255, 200, 100, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .hero p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        .progress-area {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 0.25rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #e6b422, #ff8c42);
+            height: 8px;
+            border-radius: 30px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: flex-end;
+            font-size: 0.75rem;
+            margin-top: 6px;
+            color: #ddccaa;
+        }
+
+        .question-card {
+            background: rgba(20, 16, 40, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 1.4rem 1.2rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid rgba(230, 180, 70, 0.3);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge-weight {
+            background: #e6b42220;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border: 0.5px solid #e6b422;
+            color: #ffdf99;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 0.5rem;
+        }
+
+        .opt-btn {
+            flex: 1;
+            min-width: 180px;
+            background: rgba(10, 8, 25, 0.7);
+            border: 1px solid #4a3f6e;
+            border-radius: 60px;
+            padding: 12px 16px;
+            color: #e8e2ff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .opt-btn.active {
+            background: linear-gradient(105deg, #e6b422, #ff9f4a);
+            border-color: #ffd966;
+            color: #1a0f2e;
+            font-weight: bold;
+            box-shadow: 0 0 12px #ffb34780;
+        }
+
+        @media (max-width: 550px) {
+            .opt-btn {
+                min-width: 100%;
+                width: 100%;
+            }
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            background: rgba(30, 25, 55, 0.9);
+            color: #ffeaac;
+            border: 1px solid #e6b422;
+        }
+
+        .btn-primary {
+            background: linear-gradient(95deg, #e6b422, #d97a1c);
+            color: #1e102b;
+            border: none;
+            box-shadow: 0 4px 12px #e6a82250;
+        }
+
+        .btn-primary:hover {
+            transform: scale(0.98);
+            background: #ffaa33;
+        }
+
+        .result-card {
+            background: rgba(10, 6, 25, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 1.8rem;
+            margin-top: 2rem;
+            border: 1px solid #e6b42266;
+            text-align: center;
+        }
+
+        .code-badge {
+            font-family: monospace;
+            font-size: 2rem;
+            letter-spacing: 6px;
+            background: #00000055;
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .role-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffd966, #ffb347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .character-slider {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .char-card {
+            background: #1e173eaa;
+            border-radius: 28px;
+            padding: 0.6rem 1rem;
+            min-width: 110px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            border: 1px solid #e6b42255;
+        }
+
+        .char-avatar {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 20%, #ffd966, #b37b2e);
+            border-radius: 50%;
+            margin: 0 auto 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1c102e;
+        }
+
+        .char-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .char-game {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .quote {
+            font-style: italic;
+            background: #1e173e;
+            padding: 1rem;
+            border-radius: 24px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-left: 4px solid #ffc857;
+        }
+
+        .radar-container {
+            max-width: 280px;
+            margin: 1.2rem auto;
+        }
+
+        .share-btn {
+            background: #1f1b3c;
+            border: 1px solid #e6b422;
+            margin-top: 0.8rem;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 3rem;
+            opacity: 0.5;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #1c162f;
+            max-width: 320px;
+            width: 85%;
+            border-radius: 48px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border: 1px solid #ffd966;
+            box-shadow: 0 25px 40px black;
+        }
+
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-btn {
+            background: #2a2346;
+            padding: 12px;
+            border-radius: 60px;
+            border: none;
+            color: #ffeaac;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-btn.confirm {
+            background: #e6b422;
+            color: #140e2b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1><i class="fas fa-dragon"></i> MYTI · 旅者之铭 <i class="fas fa-star-of-life"></i></h1>
+            <p>灵魂律动 · 表里之道 · 因果编织 · 契约归属</p>
+        </div>
+        <div class="progress-area">
+            <div class="progress-bar" id="progressFill"></div>
+            <div class="progress-text" id="progressLabel">0 / 16 次抉择</div>
+        </div>
+
+        <div id="questionsArea"></div>
+
+        <div class="action-buttons">
+            <button class="btn" id="resetBtn"><i class="fas fa-undo-alt"></i> 重燃旅途</button>
+            <button class="btn btn-primary" id="submitBtn"><i class="fas fa-gem"></i> 揭示命途</button>
+        </div>
+        <div id="resultArea"></div>
+        <footer>✦ 凭直觉而选，米哈游宇宙之魂 ✦</footer>
+    </div>
+
+    <div id="tieModal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-balance-scale" style="font-size: 2rem; color:#e6b422;"></i>
+            <h3 id="modalTitle">倾向持平</h3>
+            <p id="modalMessage">检测到你两种倾向持平，请选择你内心更偏向的那一方。</p>
+            <div class="modal-buttons" id="modalOptions"></div>
+        </div>
+    </div>
+
+    <script>
+        // ======================= 依据新版文档 MYTI 2.0 (维度二 诚C/隐Y) =======================
+        const QUESTIONS = [
+            // 维度1 soul: R/J
+            { id: 1, text: "你和队友突然遭遇强敌袭击，你会怎么做？", dim: "soul", weight: 1, opts: [{ txt: "立刻冲上去吸引火力，给队友创造机会。", trait: "R" }, { txt: "先观察敌人弱点，同时让队友找掩体。", trait: "J" }] },
+            { id: 2, text: "在冒险家协会或列车车厢的休息时间，你通常是：", dim: "soul", weight: 1, opts: [{ txt: "主动聊天、开玩笑，带动气氛的那个人。", trait: "R" }, { txt: "安静听大家说话，偶尔插一句精准吐槽。", trait: "J" }] },
+            { id: 3, text: "看到你最在乎的同伴被敌人打伤，你的第一反应是：", dim: "soul", weight: 1, opts: [{ txt: "怒火上涌，直接开大招反击。", trait: "R" }, { txt: "眼神变冷，迅速判断局势再出手。", trait: "J" }] },
+            { id: 4, text: "【权重1.5】哪种描述更接近你的战斗风格？", dim: "soul", weight: 1.5, opts: [{ txt: "像火焰一样猛烈进攻，用气势压倒对手。", trait: "R" }, { txt: "像寒冰一样冷静克制，用技巧掌控战斗。", trait: "J" }] },
+            // 维度2 surface: C(诚) / Y(隐)
+            { id: 5, text: "你对人对事通常：", dim: "surface", weight: 1, opts: [{ txt: "心里想什么就说什么，不喜欢藏着掖着。", trait: "C" }, { txt: "会根据情况和对象，选择性地表达，必要时会伪装。", trait: "Y" }] },
+            { id: 6, text: "朋友评价你时，更可能说：", dim: "surface", weight: 1, opts: [{ txt: "“你太真实了，有时候有点扎心，但信得过。”", trait: "C" }, { txt: "“你像一本猜不透的书，但相处久了会发现你很可靠。”", trait: "Y" }] },
+            { id: 7, text: "如果必须与一个强大的对手周旋，你会：", dim: "surface", weight: 1, opts: [{ txt: "直接亮明态度，硬碰硬。", trait: "C" }, { txt: "表面合作，暗中布局，等待最佳时机。", trait: "Y" }] },
+            { id: 8, text: "【权重1.5】你的处世哲学更接近：", dim: "surface", weight: 1.5, opts: [{ txt: "真诚是最高效的通行证。", trait: "C" }, { txt: "必要的伪装是保护自己和他人的手段。", trait: "Y" }] },
+            // 维度3 causality: M/S
+            { id: 9, text: "游戏里开放了一个全新的地图/副本，你通常会：", dim: "causality", weight: 1, opts: [{ txt: "先看攻略，查敌人资料，准备好阵容再出发。", trait: "M" }, { txt: "直接传送进去，边走边看，享受未知的惊喜。", trait: "S" }] },
+            { id: 10, text: "你更相信以下哪种世界观？", dim: "causality", weight: 1, opts: [{ txt: "一切都有因果，提前规划能避免很多麻烦。", trait: "M" }, { txt: "计划赶不上变化，有趣的体验比完美结果更重要。", trait: "S" }] },
+            { id: 11, text: "在 boss 战最后关头，你更依赖：", dim: "causality", weight: 1, opts: [{ txt: "事先背下来的技能轴和输出循环。", trait: "M" }, { txt: "临场反应，看准时机随机应变。", trait: "S" }] },
+            { id: 12, text: "【权重1.5】你的日常生活更像：", dim: "causality", weight: 1.5, opts: [{ txt: "喜欢列计划表，按部就班完成任务。", trait: "M" }, { txt: "随性而为，想到什么做什么。", trait: "S" }] },
+            // 维度4 contract: H/D
+            { id: 13, text: "你努力变强的最主要动力是：", dim: "contract", weight: 1, opts: [{ txt: "为了保护身边的伙伴和家人。", trait: "H" }, { txt: "为了实现自己的目标，不被任何人拖累。", trait: "D" }] },
+            { id: 14, text: "哪种场景让你更向往？", dim: "contract", weight: 1, opts: [{ txt: "和大家一起在热闹的据点里聊天、聚餐、接任务。", trait: "H" }, { txt: "一个人在自己的空间里安静地看书、训练或发呆。", trait: "D" }] },
+            { id: 15, text: "如果必须做出牺牲，你更容易接受：", dim: "contract", weight: 1, opts: [{ txt: "牺牲自己的利益，换取团队的安全。", trait: "H" }, { txt: "切断不必要的联系，保证自己变得更强。", trait: "D" }] },
+            { id: 16, text: "【权重1.5】你的内心更接近：", dim: "contract", weight: 1.5, opts: [{ txt: "渴望与人建立深刻的羁绊，并愿意为之付出。", trait: "H" }, { txt: "享受独立自由，不习惯依赖或被依赖。", trait: "D" }] }
+        ];
+
+        // =============== 新版结果映射 (每型多角色，依据文档2.0) ===============
+        const RESULTS_MAP = {
+            "RCMH": { title: "红莲之契约", desc: "“我就是希望本身！”热血、真诚、有计划且重羁绊。为了保护重要的人不断成长，哪怕背负一切也要照亮他人。", characters: [{ name: "琪亚娜·卡斯兰娜", game: "崩坏3" }, { name: "卡萝尔·佩珀", game: "崩坏3" }, { name: "星（开拓者·毁灭）", game: "星穹铁道" }] },
+            "RCMD": { title: "孤刃战魂", desc: "“强者之路，一人足矣。”热血、直率、善谋且独行。享受战斗，不依附他人，只为追求极致的力量。", characters: [{ name: "达达利亚（公子）", game: "原神" }, { name: "桑博", game: "星穹铁道" }, { name: "比利", game: "绝区零" }] },
+            "RCSH": { title: "烈阳同伴", desc: "“拍照、美食、冒险，缺一不可！”像小太阳，真诚、随性又温暖，是团队里最可靠的开心果。", characters: [{ name: "三月七", game: "星穹铁道" }, { name: "派蒙", game: "原神" }, { name: "爱莉希雅", game: "崩坏3" }] },
+            "RCSD": { title: "风野浪客", desc: "“生死有命，快乐就行。”热血、真诚、随性且独立，古灵精怪，用自己的方式笑看世间。", characters: [{ name: "胡桃", game: "原神" }, { name: "桂乃芬", game: "星穹铁道" }, { name: "可琳", game: "绝区零" }] },
+            "RYMH": { title: "双面守护者", desc: "“温柔不是软弱，而是最强的力量。”热血而深藏，有谋略且重守护，外表活泼或优雅，内心扛着重任。", characters: [{ name: "德丽莎·阿波卡利斯", game: "崩坏3" }, { name: "芙宁娜", game: "原神" }, { name: "姬子", game: "星穹铁道" }] },
+            "RYMD": { title: "戏命之主", desc: "“世界不过是一场棋局。”外表优雅温和，内心深沉谋略。为达目的不择手段，孤独地操控着因果。", characters: [{ name: "奥托·阿波卡利斯", game: "崩坏3" }, { name: "瓦尔特·杨", game: "星穹铁道" }, { name: "神里绫人", game: "原神" }] },
+            "RYSH": { title: "猫爪微暖", desc: "“喵~一起玩吧！”热血但擅长伪装，随性却重情，像猫一样自由，总能治愈身边的人。", characters: [{ name: "猫又", game: "绝区零" }, { name: "娜维娅", game: "原神" }, { name: "银狼", game: "星穹铁道" }] },
+            "RYSD": { title: "风与牧歌", desc: "“风也会有它的方向。”热血藏在随性之下，深藏不露，独行却守护着每一个梦。", characters: [{ name: "温迪", game: "原神" }, { name: "钟离（年轻形态）", game: "原神" }, { name: "丹恒", game: "星穹铁道" }] },
+            "JCMH": { title: "寒锋守护者", desc: "“目标锁定，我会守住一切。”冷静、真诚、善谋且重守护，话少但绝对可靠。", characters: [{ name: "布洛妮娅·扎伊切克", game: "崩坏3" }, { name: "符华", game: "崩坏3" }, { name: "刻晴", game: "原神" }] },
+            "JCMD": { title: "苍蓝裁决", desc: "“孤独亦是强大。”冷静、真诚、谋略且独行，追求绝对的理念，独自走向永恒。", characters: [{ name: "雷电将军（影）", game: "原神" }, { name: "黄泉", game: "星穹铁道" }, { name: "凯文·卡斯兰娜", game: "崩坏3" }] },
+            "JCSH": { title: "银狼之刃", desc: "“按我的节奏来就好。”外表冷静，说话直接，行事随性却意外靠谱。", characters: [{ name: "安比", game: "绝区零" }, { name: "神里绫华", game: "原神" }, { name: "素裳", game: "星穹铁道" }] },
+            "JCSD": { title: "星核猎手", desc: "“世界是游戏，我是最高权限。”冷静、真诚、随性且独行，玩转一切规则。", characters: [{ name: "银狼", game: "星穹铁道" }, { name: "阿贝多", game: "原神" }, { name: "希儿（黑希）", game: "崩坏3" }] },
+            "JYMH": { title: "智慧之瞳", desc: "“知识是为了守护。”冷静、深藏、谋略且重守护，用智慧编织希望。", characters: [{ name: "纳西妲", game: "原神" }, { name: "真理医生", game: "星穹铁道" }, { name: "爱因·瑟尔菲德", game: "崩坏3" }] },
+            "JYMD": { title: "太虚之握", desc: "“千年沧桑，一人走过。”冷静、深藏、谋略且独行，信念从未冷却，背负黑暗前行。", characters: [{ name: "凯文·卡斯兰娜", game: "崩坏3" }, { name: "刃", game: "星穹铁道" }, { name: "多托雷（博士）", game: "原神" }] },
+            "JYSH": { title: "龙女浅眠", desc: "“别吵我睡觉……要喝药吗？”外表冷静温柔，实则随性自由，默默关心他人。", characters: [{ name: "白露", game: "星穹铁道" }, { name: "瑶瑶", game: "原神" }, { name: "西琳（小西琳）", game: "崩坏3" }] },
+            "JYSD": { title: "月食之刻", desc: "“真理与孤独相伴。”冷静、深藏、随性且独行，沉浸于自己的世界，温柔而疏离。", characters: [{ name: "阿贝多", game: "原神" }, { name: "魈", game: "原神" }, { name: "镜流", game: "星穹铁道" }] }
+        };
+
+        // 维度辅助数据
+        const DIM_KEYS = { soul: ["R", "J"], surface: ["C", "Y"], causality: ["M", "S"], contract: ["H", "D"] };
+        const DIM_NAME_CN = { soul: "灵魂律动", surface: "表里之道", causality: "因果编织", contract: "契约归属" };
+        const DIM_TRAIT_NAME = { soul: ["燃(R)", "静(J)"], surface: ["诚(C)", "隐(Y)"], causality: ["谋(M)", "随(S)"], contract: ["护(H)", "独(D)"] };
+
+        let userAnswers = {};
+        let currentChart = null;
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsArea');
+            container.innerHTML = '';
+            QUESTIONS.forEach(q => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                const weightTag = q.weight === 1.5 ? '<span class="badge-weight">⭐核心权重</span>' : '';
+                card.innerHTML = `
+                <div class="question-text">${q.text} ${weightTag}</div>
+                <div class="options" data-qid="${q.id}">
+                    ${q.opts.map(opt => `<div class="opt-btn" data-trait="${opt.trait}">${opt.txt}</div>`).join('')}
+                </div>
+            `;
+                container.appendChild(card);
+                const saved = userAnswers[q.id];
+                if (saved) {
+                    const btns = card.querySelectorAll('.opt-btn');
+                    btns.forEach(btn => { if (btn.dataset.trait === saved) btn.classList.add('active'); });
+                }
+                const optDivs = card.querySelectorAll('.opt-btn');
+                optDivs.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const trait = btn.dataset.trait;
+                        userAnswers[q.id] = trait;
+                        optDivs.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        updateProgress();
+                        saveToLocal();
+                    });
+                });
+            });
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(userAnswers).length;
+            const total = QUESTIONS.length;
+            const percent = (answered / total) * 100;
+            document.getElementById('progressFill').style.width = `${percent}%`;
+            document.getElementById('progressLabel').innerText = `${answered} / ${total} 次抉择`;
+        }
+
+        function saveToLocal() { localStorage.setItem('myti_v2_answers', JSON.stringify(userAnswers)); }
+        function loadFromLocal() {
+            const saved = localStorage.getItem('myti_v2_answers');
+            if (saved) { try { userAnswers = JSON.parse(saved); renderQuestions(); } catch (e) { userAnswers = {}; renderQuestions(); } }
+            else { userAnswers = {}; renderQuestions(); }
+        }
+
+        function computeRawScores() {
+            const scores = { soul: { R: 0, J: 0 }, surface: { C: 0, Y: 0 }, causality: { M: 0, S: 0 }, contract: { H: 0, D: 0 } };
+            for (let q of QUESTIONS) {
+                const selected = userAnswers[q.id];
+                if (!selected) continue;
+                scores[q.dim][selected] += q.weight;
+            }
+            return scores;
+        }
+
+        function resolveTieBreaks(scores, resolveFinal) {
+            let ties = [];
+            for (let dim of ['soul', 'surface', 'causality', 'contract']) {
+                const [optA, optB] = DIM_KEYS[dim];
+                if (Math.abs(scores[dim][optA] - scores[dim][optB]) < 1e-6) ties.push({ dim, optA, optB });
+            }
+            if (ties.length === 0) {
+                const final = {};
+                for (let dim of ['soul', 'surface', 'causality', 'contract']) {
+                    const [optA, optB] = DIM_KEYS[dim];
+                    final[dim] = scores[dim][optA] >= scores[dim][optB] ? optA : optB;
+                }
+                resolveFinal(final);
+                return;
+            }
+            const tie = ties[0];
+            const dimCn = DIM_NAME_CN[tie.dim];
+            const [nameA, nameB] = DIM_TRAIT_NAME[tie.dim];
+            const modal = document.getElementById('tieModal');
+            const modalOptionsDiv = document.getElementById('modalOptions');
+            document.getElementById('modalTitle').innerHTML = `⚖️ ${dimCn} · 倾向持平`;
+            document.getElementById('modalMessage').innerHTML = `检测到你「${dimCn}」的两种倾向持平，请选择你内心更偏向的那一方。`;
+            modalOptionsDiv.innerHTML = `
+            <button class="modal-btn confirm" data-choice="${tie.optA}">我更偏向「${nameA}」</button>
+            <button class="modal-btn" data-choice="${tie.optB}">我更偏向「${nameB}」</button>
+        `;
+            modal.style.display = 'flex';
+            const handler = (e) => {
+                if (e.target.classList.contains('modal-btn')) {
+                    const choice = e.target.dataset.choice;
+                    modal.style.display = 'none';
+                    scores[tie.dim][choice] += 0.001;
+                    modalOptionsDiv.removeEventListener('click', handler);
+                    resolveTieBreaks(scores, resolveFinal);
+                }
+            };
+            modalOptionsDiv.addEventListener('click', handler);
+        }
+
+        function generateCode(finalLetters) { return `${finalLetters.soul}${finalLetters.surface}${finalLetters.causality}${finalLetters.contract}`; }
+
+        function showResult(code) {
+            const data = RESULTS_MAP[code];
+            if (!data) { document.getElementById('resultArea').innerHTML = `<div class="result-card">未找到对应人格，请重试</div>`; return; }
+            const scores = computeRawScores();
+            const charListHtml = data.characters.map(c => `
+            <div class="char-card">
+                <div class="char-avatar"><i class="fas fa-user-astronaut"></i></div>
+                <div class="char-name">${c.name}</div>
+                <div class="char-game">${c.game}</div>
+            </div>
+        `).join('');
+            const resultHtml = `
+            <div class="result-card" id="resultCard">
+                <div class="code-badge">${code}</div>
+                <div class="role-name">${data.title}</div>
+                <div class="character-slider">${charListHtml}</div>
+                <div class="quote">${data.desc}</div>
+                <div class="radar-container"><canvas id="radarCanvas" width="250" height="250"></canvas></div>
+                <button id="shareCanvasBtn" class="btn share-btn"><i class="fas fa-camera"></i> 铭刻命途 · 分享卡片</button>
+            </div>
+        `;
+            document.getElementById('resultArea').innerHTML = resultHtml;
+            const dimScores = { R: scores.soul.R, C: scores.surface.C, M: scores.causality.M, H: scores.contract.H };
+            const ctx = document.getElementById('radarCanvas').getContext('2d');
+            if (currentChart) currentChart.destroy();
+            currentChart = new Chart(ctx, {
+                type: 'radar',
+                data: { labels: ['燃 (R)', '诚 (C)', '谋 (M)', '护 (H)'], datasets: [{ label: '倾向强度', data: [dimScores.R, dimScores.C, dimScores.M, dimScores.H], backgroundColor: 'rgba(230,180,34,0.3)', borderColor: '#ffcc66', borderWidth: 2, pointBackgroundColor: '#ffaa33', pointBorderColor: '#fff', pointRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: true, scales: { r: { min: 0, max: 4.5, ticks: { stepSize: 1, color: '#e0d4ff' }, grid: { color: '#5f4c8b' } } }, plugins: { legend: { labels: { color: '#f5e7c8' } } } }
+            });
+            document.getElementById('shareCanvasBtn').addEventListener('click', () => generateShareCard(code, data));
+        }
+
+        function generateShareCard(code, data) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 600; canvas.height = 800;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            grad.addColorStop(0, '#1a103c'); grad.addColorStop(1, '#0b0720');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffdf99';
+            for (let i = 0; i < 120; i++) ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 2, 2);
+            ctx.strokeStyle = '#e6b422'; ctx.lineWidth = 4; ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+            ctx.font = 'bold 28px "Segoe UI"'; ctx.fillStyle = '#ffdd99'; ctx.fillText('✦ MYTI 命途之证 ✦', 120, 100);
+            ctx.font = 'bold 44px monospace'; ctx.fillStyle = '#ffc857'; ctx.fillText(code, 220, 190);
+            ctx.font = '28px "Segoe UI"'; ctx.fillStyle = '#ffe0aa'; ctx.fillText(data.title, 140, 280);
+            const sampleChar = data.characters[0].name;
+            ctx.font = '18px system-ui'; ctx.fillStyle = '#ccb9ff'; ctx.fillText(`代表：${sampleChar}`, 200, 340);
+            ctx.font = 'italic 15px system-ui'; ctx.fillStyle = '#efdfb7'; const shortDesc = data.desc.length > 70 ? data.desc.slice(0, 70) + "…" : data.desc;
+            ctx.fillText(shortDesc, 60, 480, 480);
+            ctx.font = 'bold 14px system-ui'; ctx.fillStyle = '#e6b422'; ctx.fillText('「米哈游宇宙 · 灵魂共鸣」', 180, 620);
+            ctx.font = '12px monospace'; ctx.fillStyle = '#7e6d9e'; ctx.fillText('MYTI 人格测试 · 独属于你的旅者铭文', 180, 740);
+            ctx.beginPath(); ctx.arc(300, 160, 35, 0, 2 * Math.PI); ctx.fillStyle = '#e6b422'; ctx.fill();
+            ctx.fillStyle = '#2c1e40'; ctx.font = 'bold 30px sans-serif'; ctx.fillText(data.title.charAt(0), 285, 178);
+            const link = document.createElement('a'); link.download = `MYTI_${code}.png`; link.href = canvas.toDataURL(); link.click();
+        }
+
+        function onSubmit() {
+            if (Object.keys(userAnswers).length !== QUESTIONS.length) { alert(`旅途未竟！已完成 ${Object.keys(userAnswers).length}/${QUESTIONS.length} 题`); return; }
+            const rawScores = computeRawScores();
+            resolveTieBreaks(rawScores, (finalLetters) => { const code = generateCode(finalLetters); showResult(code); document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' }); });
+        }
+        function resetTest() { localStorage.removeItem('myti_v2_answers'); userAnswers = {}; renderQuestions(); document.getElementById('resultArea').innerHTML = ''; if (currentChart) currentChart.destroy(); updateProgress(); }
+
+        document.getElementById('submitBtn').addEventListener('click', onSubmit);
+        document.getElementById('resetBtn').addEventListener('click', resetTest);
+        loadFromLocal();
+    </script>
+</body>
+
+</html
