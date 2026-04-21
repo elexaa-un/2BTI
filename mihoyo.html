@@ -5,10 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>MYTI · 米哈游人格测试 | 旅者之铭2.0</title>
-    <!-- Font Awesome 6 装饰图标库 -->
+    <title>MYTI · 米哈游人格测试 | 24题无权重 · 32角色向量库</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Chart.js 轻量雷达图 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
@@ -19,13 +17,12 @@
 
         body {
             background: linear-gradient(145deg, #0b0719 0%, #1a1333 100%);
-            font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, -apple-system, 'Noto Sans CJK SC', sans-serif;
+            font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, sans-serif;
             color: #f0eef7;
             padding: 1.5rem 1rem 3rem;
             min-height: 100vh;
         }
 
-        /* 星空特效 */
         body::before {
             content: "";
             position: fixed;
@@ -43,7 +40,7 @@
         }
 
         .container {
-            max-width: 750px;
+            max-width: 800px;
             margin: 0 auto;
             position: relative;
             z-index: 2;
@@ -60,8 +57,6 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 8px rgba(255, 200, 100, 0.3);
-            letter-spacing: 1px;
         }
 
         .hero p {
@@ -101,34 +96,18 @@
             padding: 1.4rem 1.2rem;
             margin-bottom: 1.2rem;
             border: 1px solid rgba(230, 180, 70, 0.3);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
-            transition: all 0.2s;
         }
 
         .question-text {
             font-size: 1.05rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .badge-weight {
-            background: #e6b42220;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            padding: 0.2rem 0.6rem;
-            border: 0.5px solid #e6b422;
-            color: #ffdf99;
         }
 
         .options {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
-            margin-top: 0.5rem;
         }
 
         .opt-btn {
@@ -142,9 +121,8 @@
             font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
-            transition: 0.2s;
             text-align: center;
-            backdrop-filter: blur(4px);
+            transition: 0.2s;
         }
 
         .opt-btn.active {
@@ -158,7 +136,6 @@
         @media (max-width: 550px) {
             .opt-btn {
                 min-width: 100%;
-                width: 100%;
             }
         }
 
@@ -176,7 +153,6 @@
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            transition: 0.2s;
             background: rgba(30, 25, 55, 0.9);
             color: #ffeaac;
             border: 1px solid #e6b422;
@@ -186,12 +162,6 @@
             background: linear-gradient(95deg, #e6b422, #d97a1c);
             color: #1e102b;
             border: none;
-            box-shadow: 0 4px 12px #e6a82250;
-        }
-
-        .btn-primary:hover {
-            transform: scale(0.98);
-            background: #ffaa33;
         }
 
         .result-card {
@@ -201,91 +171,131 @@
             padding: 1.8rem;
             margin-top: 2rem;
             border: 1px solid #e6b42266;
+        }
+
+        .vector-bars {
+            margin: 1rem 0;
+        }
+
+        .vector-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .vector-label {
+            width: 70px;
+            font-weight: bold;
+        }
+
+        .vector-bar-bg {
+            flex: 1;
+            height: 12px;
+            background: #2a2346;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .vector-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e6b422, #ff9f4a);
+            width: 0%;
+            border-radius: 20px;
+        }
+
+        .role-card {
+            background: #1e173eaa;
+            border-radius: 28px;
+            padding: 1rem;
+            margin-bottom: 1rem;
             text-align: center;
         }
 
-        .code-badge {
-            font-family: monospace;
-            font-size: 2rem;
-            letter-spacing: 6px;
-            background: #00000055;
-            display: inline-block;
-            padding: 0.3rem 1rem;
-            border-radius: 60px;
-            margin-bottom: 1rem;
-            font-weight: bold;
+        /* 主结果头像 */
+        .role-card .avatar {
+            width: 120px;
+            height: auto;
+            border-radius: 0;
+            margin-bottom: 12px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 1px solid #e6b422;
+        }
+
+        /* 副结果小卡片头像 */
+        .mini-card .avatar {
+            width: 70px;
+            height: auto;
+            border-radius: 0;
+            display: block;
+            margin: 0 auto 8px;
+            border: 1px solid #ffd966;
+        }
+
+        .role-card img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .mini-card img {
+            width: 60px;
+            height: 60px;
         }
 
         .role-name {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #ffd966, #ffb347);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: #ffdf99;
         }
 
-        .character-slider {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .char-card {
-            background: #1e173eaa;
-            border-radius: 28px;
-            padding: 0.6rem 1rem;
-            min-width: 110px;
-            text-align: center;
-            backdrop-filter: blur(4px);
-            border: 1px solid #e6b42255;
-        }
-
-        .char-avatar {
-            width: 70px;
-            height: 70px;
-            background: radial-gradient(circle at 30% 20%, #ffd966, #b37b2e);
-            border-radius: 50%;
-            margin: 0 auto 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: bold;
-            color: #1c102e;
-        }
-
-        .char-name {
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        .char-game {
-            font-size: 0.7rem;
-            opacity: 0.7;
+        .game-tag {
+            font-size: 0.8rem;
+            opacity: 0.8;
         }
 
         .quote {
             font-style: italic;
-            background: #1e173e;
-            padding: 1rem;
+            background: #00000055;
+            padding: 0.8rem;
             border-radius: 24px;
-            margin: 1rem 0;
-            font-size: 0.9rem;
-            border-left: 4px solid #ffc857;
+            margin: 0.8rem 0;
+        }
+
+        .top3-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+
+        .mini-card {
+            background: #0f0b29;
+            border-radius: 24px;
+            padding: 0.8rem;
+            width: 140px;
+            text-align: center;
+            border: 1px solid #e6b42255;
+        }
+
+        .similarity {
+            font-size: 0.8rem;
+            color: #ffd966;
+            font-weight: bold;
         }
 
         .radar-container {
             max-width: 280px;
-            margin: 1.2rem auto;
+            margin: 1rem auto;
         }
 
         .share-btn {
             background: #1f1b3c;
             border: 1px solid #e6b422;
-            margin-top: 0.8rem;
+            margin-top: 1rem;
         }
 
         footer {
@@ -317,7 +327,6 @@
             padding: 2rem 1.5rem;
             text-align: center;
             border: 1px solid #ffd966;
-            box-shadow: 0 25px 40px black;
         }
 
         .modal-buttons {
@@ -348,15 +357,13 @@
     <div class="container">
         <div class="hero">
             <h1><i class="fas fa-dragon"></i> MYTI · 旅者之铭 <i class="fas fa-star-of-life"></i></h1>
-            <p>灵魂律动 · 表里之道 · 因果编织 · 契约归属</p>
+            <p>灵魂律动 · 表里之道 · 因果编织 · 契约归属 | 24题 · 32角色向量匹配</p>
         </div>
         <div class="progress-area">
             <div class="progress-bar" id="progressFill"></div>
-            <div class="progress-text" id="progressLabel">0 / 16 次抉择</div>
+            <div class="progress-text" id="progressLabel">0 / 24 次抉择</div>
         </div>
-
         <div id="questionsArea"></div>
-
         <div class="action-buttons">
             <button class="btn" id="resetBtn"><i class="fas fa-undo-alt"></i> 重燃旅途</button>
             <button class="btn btn-primary" id="submitBtn"><i class="fas fa-gem"></i> 揭示命途</button>
@@ -364,78 +371,98 @@
         <div id="resultArea"></div>
         <footer>✦ 凭直觉而选，米哈游宇宙之魂 ✦</footer>
     </div>
-
     <div id="tieModal" class="modal">
         <div class="modal-content">
             <i class="fas fa-balance-scale" style="font-size: 2rem; color:#e6b422;"></i>
-            <h3 id="modalTitle">倾向持平</h3>
+            <h3 id="modalTitle">两种力量势均力敌</h3>
             <p id="modalMessage">检测到你两种倾向持平，请选择你内心更偏向的那一方。</p>
             <div class="modal-buttons" id="modalOptions"></div>
         </div>
     </div>
 
     <script>
-        // ======================= 依据新版文档 MYTI 2.0 (维度二 诚C/隐Y) =======================
+        // ======================= 24道题目 (每维度6题，权重均为1) =======================
         const QUESTIONS = [
-            // 维度1 soul: R/J
-            { id: 1, text: "你和队友突然遭遇强敌袭击，你会怎么做？", dim: "soul", weight: 1, opts: [{ txt: "立刻冲上去吸引火力，给队友创造机会。", trait: "R" }, { txt: "先观察敌人弱点，同时让队友找掩体。", trait: "J" }] },
-            { id: 2, text: "在冒险家协会或列车车厢的休息时间，你通常是：", dim: "soul", weight: 1, opts: [{ txt: "主动聊天、开玩笑，带动气氛的那个人。", trait: "R" }, { txt: "安静听大家说话，偶尔插一句精准吐槽。", trait: "J" }] },
-            { id: 3, text: "看到你最在乎的同伴被敌人打伤，你的第一反应是：", dim: "soul", weight: 1, opts: [{ txt: "怒火上涌，直接开大招反击。", trait: "R" }, { txt: "眼神变冷，迅速判断局势再出手。", trait: "J" }] },
-            { id: 4, text: "【权重1.5】哪种描述更接近你的战斗风格？", dim: "soul", weight: 1.5, opts: [{ txt: "像火焰一样猛烈进攻，用气势压倒对手。", trait: "R" }, { txt: "像寒冰一样冷静克制，用技巧掌控战斗。", trait: "J" }] },
-            // 维度2 surface: C(诚) / Y(隐)
-            { id: 5, text: "你对人对事通常：", dim: "surface", weight: 1, opts: [{ txt: "心里想什么就说什么，不喜欢藏着掖着。", trait: "C" }, { txt: "会根据情况和对象，选择性地表达，必要时会伪装。", trait: "Y" }] },
-            { id: 6, text: "朋友评价你时，更可能说：", dim: "surface", weight: 1, opts: [{ txt: "“你太真实了，有时候有点扎心，但信得过。”", trait: "C" }, { txt: "“你像一本猜不透的书，但相处久了会发现你很可靠。”", trait: "Y" }] },
-            { id: 7, text: "如果必须与一个强大的对手周旋，你会：", dim: "surface", weight: 1, opts: [{ txt: "直接亮明态度，硬碰硬。", trait: "C" }, { txt: "表面合作，暗中布局，等待最佳时机。", trait: "Y" }] },
-            { id: 8, text: "【权重1.5】你的处世哲学更接近：", dim: "surface", weight: 1.5, opts: [{ txt: "真诚是最高效的通行证。", trait: "C" }, { txt: "必要的伪装是保护自己和他人的手段。", trait: "Y" }] },
-            // 维度3 causality: M/S
-            { id: 9, text: "游戏里开放了一个全新的地图/副本，你通常会：", dim: "causality", weight: 1, opts: [{ txt: "先看攻略，查敌人资料，准备好阵容再出发。", trait: "M" }, { txt: "直接传送进去，边走边看，享受未知的惊喜。", trait: "S" }] },
-            { id: 10, text: "你更相信以下哪种世界观？", dim: "causality", weight: 1, opts: [{ txt: "一切都有因果，提前规划能避免很多麻烦。", trait: "M" }, { txt: "计划赶不上变化，有趣的体验比完美结果更重要。", trait: "S" }] },
-            { id: 11, text: "在 boss 战最后关头，你更依赖：", dim: "causality", weight: 1, opts: [{ txt: "事先背下来的技能轴和输出循环。", trait: "M" }, { txt: "临场反应，看准时机随机应变。", trait: "S" }] },
-            { id: 12, text: "【权重1.5】你的日常生活更像：", dim: "causality", weight: 1.5, opts: [{ txt: "喜欢列计划表，按部就班完成任务。", trait: "M" }, { txt: "随性而为，想到什么做什么。", trait: "S" }] },
-            // 维度4 contract: H/D
-            { id: 13, text: "你努力变强的最主要动力是：", dim: "contract", weight: 1, opts: [{ txt: "为了保护身边的伙伴和家人。", trait: "H" }, { txt: "为了实现自己的目标，不被任何人拖累。", trait: "D" }] },
-            { id: 14, text: "哪种场景让你更向往？", dim: "contract", weight: 1, opts: [{ txt: "和大家一起在热闹的据点里聊天、聚餐、接任务。", trait: "H" }, { txt: "一个人在自己的空间里安静地看书、训练或发呆。", trait: "D" }] },
-            { id: 15, text: "如果必须做出牺牲，你更容易接受：", dim: "contract", weight: 1, opts: [{ txt: "牺牲自己的利益，换取团队的安全。", trait: "H" }, { txt: "切断不必要的联系，保证自己变得更强。", trait: "D" }] },
-            { id: 16, text: "【权重1.5】你的内心更接近：", dim: "contract", weight: 1.5, opts: [{ txt: "渴望与人建立深刻的羁绊，并愿意为之付出。", trait: "H" }, { txt: "享受独立自由，不习惯依赖或被依赖。", trait: "D" }] }
+            // 灵魂律动 燃R/静J
+            { id: 1, text: "周末醒来，你更可能：", dim: "soul", opts: [{ txt: "立刻跳起来，今天有好多事要做！", trait: "R" }, { txt: "赖床刷手机，慢慢清醒再决定干嘛。", trait: "J" }] },
+            { id: 2, text: "朋友喊你吃火锅，但地方很远，你会：", dim: "soul", opts: [{ txt: "“走！为了毛肚跑半个城也值！”", trait: "R" }, { txt: "“要不换家近的？或者点外卖？”", trait: "J" }] },
+            { id: 3, text: "游戏卡关/工作遇到难题，你第一反应：", dim: "soul", opts: [{ txt: "头铁硬刚，试它十遍！", trait: "R" }, { txt: "查攻略/问大佬，找最优解。", trait: "J" }] },
+            { id: 4, text: "计划旅行时，你更像：", dim: "soul", opts: [{ txt: "特种兵式打卡，一天跑八个景点。", trait: "R" }, { txt: "佛系躺酒店，随缘逛吃。", trait: "J" }] },
+            { id: 5, text: "在 KTV 或派对上，你通常是：", dim: "soul", opts: [{ txt: "麦霸，主动点歌唱跳。", trait: "R" }, { txt: "安静坐着，帮大家鼓掌。", trait: "J" }] },
+            { id: 6, text: "支持的队伍落后时，你会：", dim: "soul", opts: [{ txt: "激动发弹幕：“翻盘！翻盘！”", trait: "R" }, { txt: "默默看着，心里分析哪里出问题。", trait: "J" }] },
+            // 表里之道 诚C/隐Y
+            { id: 7, text: "朋友跟你抱怨另一个人，你会：", dim: "surface", opts: [{ txt: "直接说我的真实看法，哪怕不好听。", trait: "C" }, { txt: "先附和，再委婉引导他换个角度。", trait: "Y" }] },
+            { id: 8, text: "你发朋友圈的频率和内容是：", dim: "surface", opts: [{ txt: "想发就发，几乎不分组，真实记录生活。", trait: "C" }, { txt: "很少发，或者精心分组，只展示想给人看的一面。", trait: "Y" }] },
+            { id: 9, text: "面对不喜欢的领导/老师，你会：", dim: "surface", opts: [{ txt: "不爽就写在脸上，但该做的还是会做。", trait: "C" }, { txt: "表面恭敬，心里默默翻白眼。", trait: "Y" }] },
+            { id: 10, text: "有人告诉你一个秘密，并让你保密，你会：", dim: "surface", opts: [{ txt: "绝对不说，但会觉得憋得难受。", trait: "C" }, { txt: "轻松守住，甚至能面不改色地打岔。", trait: "Y" }] },
+            { id: 11, text: "收到不喜欢的礼物，你会：", dim: "surface", opts: [{ txt: "直接说：“这个不太适合我，能换一个吗？”", trait: "C" }, { txt: "笑着收下，说谢谢，回头再处理。", trait: "Y" }] },
+            { id: 12, text: "别人对你的第一印象往往是：", dim: "surface", opts: [{ txt: "一眼就能看透，没什么心机。", trait: "C" }, { txt: "挺有距离感，需要深交才了解。", trait: "Y" }] },
+            // 因果编织 谋M/随S
+            { id: 13, text: "买大件（如手机、电脑）前，你会：", dim: "causality", opts: [{ txt: "看测评、比参数、蹲好价，至少研究一周。", trait: "M" }, { txt: "看眼缘，差不多就买了，早买早享受。", trait: "S" }] },
+            { id: 14, text: "你更习惯：", dim: "causality", opts: [{ txt: "列To-Do List，按优先级完成。", trait: "M" }, { txt: "想到哪做到哪，deadline是第一生产力。", trait: "S" }] },
+            { id: 15, text: "抽卡前你会：", dim: "causality", opts: [{ txt: "算保底、看玄学时间、垫池子。", trait: "M" }, { txt: "随缘单抽，出了惊喜，没出拉倒。", trait: "S" }] },
+            { id: 16, text: "精心做的计划突然被打乱，你会：", dim: "causality", opts: [{ txt: "烦躁但迅速重排，备选方案启动。", trait: "M" }, { txt: "“那就这样吧”，顺势开启新节奏。", trait: "S" }] },
+            { id: 17, text: "你的房间/桌面通常是：", dim: "causality", opts: [{ txt: "分门别类，每样东西都有固定位置。", trait: "M" }, { txt: "乱中有序，我知道东西在哪就行。", trait: "S" }] },
+            { id: 18, text: "发工资/生活费后，你会：", dim: "causality", opts: [{ txt: "先做预算，控制支出，存固定比例。", trait: "M" }, { txt: "该花就花，剩下多少存多少。", trait: "S" }] },
+            // 契约归属 护H/独D
+            { id: 19, text: "小组作业/项目里，你通常：", dim: "contract", opts: [{ txt: "主动多做一些，怕队友做不好。", trait: "H" }, { txt: "做好自己的部分，不多管闲事。", trait: "D" }] },
+            { id: 20, text: "累了一天，哪种方式最能回血？", dim: "contract", opts: [{ txt: "和朋友聚会、开黑、聊天。", trait: "H" }, { txt: "一个人宅家刷剧、打游戏、发呆。", trait: "D" }] },
+            { id: 21, text: "路边有人需要帮助（如问路、搬东西），你会：", dim: "contract", opts: [{ txt: "主动上前询问帮忙。", trait: "H" }, { txt: "如果他没开口，我就路过。", trait: "D" }] },
+            { id: 22, text: "你更向往：", dim: "contract", opts: [{ txt: "和三五好友住同一个小区，随时串门。", trait: "H" }, { txt: "独居大房子，没人打扰我的节奏。", trait: "D" }] },
+            { id: 23, text: "你生病时更希望：", dim: "contract", opts: [{ txt: "有人陪我去医院，照顾我。", trait: "H" }, { txt: "自己扛着，不想麻烦别人。", trait: "D" }] },
+            { id: 24, text: "做人生重大决定（换工作、搬家等）时，你会：", dim: "contract", opts: [{ txt: "和亲友商量，听取多方意见。", trait: "H" }, { txt: "自己分析利弊，独自决定。", trait: "D" }] }
         ];
 
-        // =============== 新版结果映射 (每型多角色，依据文档2.0) ===============
-        const RESULTS_MAP = {
-            "RCMH": { title: "红莲之契约", desc: "“我就是希望本身！”热血、真诚、有计划且重羁绊。为了保护重要的人不断成长，哪怕背负一切也要照亮他人。", characters: [{ name: "琪亚娜·卡斯兰娜", game: "崩坏3" }, { name: "卡萝尔·佩珀", game: "崩坏3" }, { name: "星（开拓者·毁灭）", game: "星穹铁道" }] },
-            "RCMD": { title: "孤刃战魂", desc: "“强者之路，一人足矣。”热血、直率、善谋且独行。享受战斗，不依附他人，只为追求极致的力量。", characters: [{ name: "达达利亚（公子）", game: "原神" }, { name: "桑博", game: "星穹铁道" }, { name: "比利", game: "绝区零" }] },
-            "RCSH": { title: "烈阳同伴", desc: "“拍照、美食、冒险，缺一不可！”像小太阳，真诚、随性又温暖，是团队里最可靠的开心果。", characters: [{ name: "三月七", game: "星穹铁道" }, { name: "派蒙", game: "原神" }, { name: "爱莉希雅", game: "崩坏3" }] },
-            "RCSD": { title: "风野浪客", desc: "“生死有命，快乐就行。”热血、真诚、随性且独立，古灵精怪，用自己的方式笑看世间。", characters: [{ name: "胡桃", game: "原神" }, { name: "桂乃芬", game: "星穹铁道" }, { name: "可琳", game: "绝区零" }] },
-            "RYMH": { title: "双面守护者", desc: "“温柔不是软弱，而是最强的力量。”热血而深藏，有谋略且重守护，外表活泼或优雅，内心扛着重任。", characters: [{ name: "德丽莎·阿波卡利斯", game: "崩坏3" }, { name: "芙宁娜", game: "原神" }, { name: "姬子", game: "星穹铁道" }] },
-            "RYMD": { title: "戏命之主", desc: "“世界不过是一场棋局。”外表优雅温和，内心深沉谋略。为达目的不择手段，孤独地操控着因果。", characters: [{ name: "奥托·阿波卡利斯", game: "崩坏3" }, { name: "瓦尔特·杨", game: "星穹铁道" }, { name: "神里绫人", game: "原神" }] },
-            "RYSH": { title: "猫爪微暖", desc: "“喵~一起玩吧！”热血但擅长伪装，随性却重情，像猫一样自由，总能治愈身边的人。", characters: [{ name: "猫又", game: "绝区零" }, { name: "娜维娅", game: "原神" }, { name: "银狼", game: "星穹铁道" }] },
-            "RYSD": { title: "风与牧歌", desc: "“风也会有它的方向。”热血藏在随性之下，深藏不露，独行却守护着每一个梦。", characters: [{ name: "温迪", game: "原神" }, { name: "钟离（年轻形态）", game: "原神" }, { name: "丹恒", game: "星穹铁道" }] },
-            "JCMH": { title: "寒锋守护者", desc: "“目标锁定，我会守住一切。”冷静、真诚、善谋且重守护，话少但绝对可靠。", characters: [{ name: "布洛妮娅·扎伊切克", game: "崩坏3" }, { name: "符华", game: "崩坏3" }, { name: "刻晴", game: "原神" }] },
-            "JCMD": { title: "苍蓝裁决", desc: "“孤独亦是强大。”冷静、真诚、谋略且独行，追求绝对的理念，独自走向永恒。", characters: [{ name: "雷电将军（影）", game: "原神" }, { name: "黄泉", game: "星穹铁道" }, { name: "凯文·卡斯兰娜", game: "崩坏3" }] },
-            "JCSH": { title: "银狼之刃", desc: "“按我的节奏来就好。”外表冷静，说话直接，行事随性却意外靠谱。", characters: [{ name: "安比", game: "绝区零" }, { name: "神里绫华", game: "原神" }, { name: "素裳", game: "星穹铁道" }] },
-            "JCSD": { title: "星核猎手", desc: "“世界是游戏，我是最高权限。”冷静、真诚、随性且独行，玩转一切规则。", characters: [{ name: "银狼", game: "星穹铁道" }, { name: "阿贝多", game: "原神" }, { name: "希儿（黑希）", game: "崩坏3" }] },
-            "JYMH": { title: "智慧之瞳", desc: "“知识是为了守护。”冷静、深藏、谋略且重守护，用智慧编织希望。", characters: [{ name: "纳西妲", game: "原神" }, { name: "真理医生", game: "星穹铁道" }, { name: "爱因·瑟尔菲德", game: "崩坏3" }] },
-            "JYMD": { title: "太虚之握", desc: "“千年沧桑，一人走过。”冷静、深藏、谋略且独行，信念从未冷却，背负黑暗前行。", characters: [{ name: "凯文·卡斯兰娜", game: "崩坏3" }, { name: "刃", game: "星穹铁道" }, { name: "多托雷（博士）", game: "原神" }] },
-            "JYSH": { title: "龙女浅眠", desc: "“别吵我睡觉……要喝药吗？”外表冷静温柔，实则随性自由，默默关心他人。", characters: [{ name: "白露", game: "星穹铁道" }, { name: "瑶瑶", game: "原神" }, { name: "西琳（小西琳）", game: "崩坏3" }] },
-            "JYSD": { title: "月食之刻", desc: "“真理与孤独相伴。”冷静、深藏、随性且独行，沉浸于自己的世界，温柔而疏离。", characters: [{ name: "阿贝多", game: "原神" }, { name: "魈", game: "原神" }, { name: "镜流", game: "星穹铁道" }] }
-        };
-
-        // 维度辅助数据
-        const DIM_KEYS = { soul: ["R", "J"], surface: ["C", "Y"], causality: ["M", "S"], contract: ["H", "D"] };
-        const DIM_NAME_CN = { soul: "灵魂律动", surface: "表里之道", causality: "因果编织", contract: "契约归属" };
-        const DIM_TRAIT_NAME = { soul: ["燃(R)", "静(J)"], surface: ["诚(C)", "隐(Y)"], causality: ["谋(M)", "随(S)"], contract: ["护(H)", "独(D)"] };
+        // ======================= 32角色向量库 (燃%,诚%,谋%,护%) =======================
+        const CHARACTERS = [
+            { id: "kiana", name: "琪亚娜·卡斯兰娜", game: "崩坏3", vector: [85, 75, 35, 90], desc: "从叛逆少女成长为背负一切的战士，热血真诚，守护至上。", quote: "“纵使长夜无尽，我也要成为照亮世界的太阳！”", avatar: "image/caolvchong.png" },
+            { id: "otto", name: "奥托·阿波卡利斯", game: "崩坏3", vector: [30, 10, 95, 15], desc: "五百年谋略家，为复活卡莲不惜一切，深藏不露。", quote: "“世界当然不够完美，所以我们才需要为此奋斗。”", avatar: "image/aotuo.png" },
+            { id: "bronya", name: "布洛妮娅·扎伊切克", game: "崩坏3", vector: [20, 85, 85, 85], desc: "冷静、重情、善谋，守护希儿是她最大的动力。", quote: "“重装小兔，目标锁定。我不会再失去任何人。”", avatar: "image/buruoniya.png" },
+            { id: "mei", name: "雷电芽衣", game: "崩坏3", vector: [55, 60, 70, 65], desc: "从温柔到决绝，兼具行动力与谋略，守护同伴。", quote: "“雷光所至，皆为吾心。”", avatar: "image/leidianyayi.png" },
+            { id: "fu_hua", name: "符华", game: "崩坏3", vector: [25, 80, 80, 75], desc: "五万年的守护者，冷静克制，忠诚坚定。", quote: "“赤鸢之翼，永不折戟。”", avatar: "image/fuhua.png" },
+            { id: "kevin", name: "凯文·卡斯兰娜", game: "崩坏3", vector: [70, 30, 85, 40], desc: "为救世不择手段，热血与冷酷并存。", quote: "“为了大多数人，少数人的牺牲是必要的。”", avatar: "image/kaiwen.png" },
+            { id: "elysia", name: "爱莉希雅", game: "崩坏3", vector: [80, 90, 40, 85], desc: "如飞花般绚烂，真诚热爱一切美好，守护同伴。", quote: "“我就是我，是颜色不一样的烟火~”", avatar: "image/ailixiya.png" },
+            { id: "seele", name: "希儿·芙乐艾", game: "崩坏3", vector: [40, 75, 50, 80], desc: "温柔内敛，但为保护他人可以变得强大。", quote: "“另一个我，请借给我力量。”", avatar: "image/xier.png" },
+            { id: "traveler", name: "旅行者（荧/空）", game: "原神", vector: [60, 70, 50, 75], desc: "寻亲之旅中不断结交同伴，兼具热血与温柔。", quote: "“只要坚信自己的道路，就无所谓天气是晴是雨。”", avatar: "image/lvxingzhe.png" },
+            { id: "paimon", name: "派蒙", game: "原神", vector: [70, 85, 20, 85], desc: "最好的伙伴，话多但真诚，永远站在旅行者身边。", quote: "“前面的区域，以后再来探索吧！”", avatar: "image/paimeng.png" },
+            { id: "zhongli", name: "钟离", game: "原神", vector: [10, 70, 85, 70], desc: "六千年的契约之神，冷静谋划，守护璃月。", quote: "“契约既成，食言者当受食岩之罚。”", avatar: "image/zhongli.png" },
+            { id: "raiden_shogun", name: "雷电将军（影）", game: "原神", vector: [15, 20, 90, 15], desc: "追求永恒，斩断羁绊，孤独的统治者。", quote: "“稻光如梦，此刻即是永恒。”", avatar: "image/leidianjiangjun.png" },
+            { id: "nahida", name: "纳西妲", game: "原神", vector: [20, 85, 85, 90], desc: "智慧与温柔并存的草神，用知识守护须弥。", quote: "“知识无法让人变得完美，但可以让人变得完整。”", avatar: "image/naxida.png" },
+            { id: "furina", name: "芙宁娜", game: "原神", vector: [55, 25, 75, 60], desc: "五百年扮演神明，外表浮夸，内心孤独。", quote: "“审判！哦不，演出开始了！”", avatar: "image/funingna.png" },
+            { id: "tartaglia", name: "达达利亚", game: "原神", vector: [90, 70, 55, 30], desc: "战斗狂，享受挑战，对家人温柔但对敌人冷酷。", quote: "“强者就该挑战更强，这就是我的战斗之道。”", avatar: "image/dadaliya.png" },
+            { id: "hutao", name: "胡桃", game: "原神", vector: [80, 85, 30, 70], desc: "古灵精怪，真诚直率，独行但不冷漠。", quote: "“生死有命，快乐就行。买单？下次一定！”", avatar: "image/hutao.png" },
+            { id: "albedo", name: "阿贝多", game: "原神", vector: [20, 70, 80, 50], desc: "专注炼金术，冷静温柔，享受独处。", quote: "“真理与孤独相伴，但创造本身就是一种温柔。”", avatar: "image/abeiduo.png" },
+            { id: "xiao", name: "魈", game: "原神", vector: [45, 50, 40, 75], desc: "孤独的夜叉，不善表达但默默守护。", quote: "“无用！……不过，还是谢了。”", avatar: "image/xiao.png" },
+            { id: "ayaka", name: "神里绫华", game: "原神", vector: [35, 75, 70, 80], desc: "优雅端庄，为家族和人民谋划，内心温柔。", quote: "“白雪与飞樱，皆为我心。”", avatar: "image/shenlilinhua.png" },
+            { id: "itto", name: "荒泷一斗", game: "原神", vector: [95, 90, 15, 85], desc: "热血笨蛋，真诚直率，重情重义。", quote: "“荒泷天下第一斗，在此！”", avatar: "image/huanglongyidou.png" },
+            { id: "stellaron_hunter", name: "星/穹（开拓者）", game: "星穹铁道", vector: [65, 70, 45, 75], desc: "自由选择，但总体热血真诚，重视同伴。", quote: "“规则，就是用来打破的。”", avatar: "image/kaituozhe.png" },
+            { id: "march", name: "三月七", game: "星穹铁道", vector: [75, 85, 30, 80], desc: "元气少女，真诚可爱，是列车的开心果。", quote: "“拍照留念！这可是珍贵回忆！”", avatar: "image/sanyueqi.png" },
+            { id: "danheng", name: "丹恒", game: "星穹铁道", vector: [35, 60, 65, 60], desc: "冷静克制，背负过往，默默守护同伴。", quote: "“我不会停留，但我会记得。”", avatar: "image/danheng.png" },
+            { id: "himeko", name: "姬子", game: "星穹铁道", vector: [50, 80, 75, 85], desc: "优雅成熟，是列车的领航员与守护者。", quote: "“咖啡要趁热喝，人生要趁早做。”", avatar: "image/jizi.png" },
+            { id: "welt", name: "瓦尔特·杨", game: "星穹铁道", vector: [40, 70, 80, 75], desc: "历经沧桑的守护者，冷静而坚定。", quote: "“我不会让悲剧重演。”", avatar: "image/yangshu.png" },
+            { id: "kafka", name: "卡芙卡", game: "星穹铁道", vector: [25, 20, 85, 25], desc: "星核猎手，深不可测，享受“猎杀”的艺术。", quote: "“恐惧不是弱点，而是武器。”", avatar: "image/kafuka.png" },
+            { id: "silverwolf", name: "银狼", game: "星穹铁道", vector: [35, 65, 45, 25], desc: "天才黑客，随性自由，不喜欢被束缚。", quote: "“世界是游戏，而我是最高权限玩家。”", avatar: "image/yinlang.png" },
+            { id: "blade", name: "刃", game: "星穹铁道", vector: [45, 30, 70, 20], desc: "背负魔阴身的永生者，冷酷而执着。", quote: "“死亡，不过是另一种开始。”", avatar: "image/ren.png" },
+            { id: "jingyuan", name: "景元", game: "星穹铁道", vector: [30, 70, 85, 80], desc: "运筹帷幄的将军，表面慵懒，内心守护。", quote: "“闭眼，然后做个好梦。”", avatar: "image/jingyuan.png" },
+            { id: "jingliu", name: "镜流", game: "星穹铁道", vector: [55, 35, 75, 30], desc: "曾经的剑首，被魔阴侵蚀，孤独的复仇者。", quote: "“剑出无回，心亦无归。”", avatar: "image/jingliu.png" },
+            { id: "nekomata", name: "猫又", game: "绝区零", vector: [75, 45, 25, 70], desc: "自由随性，擅长伪装，但内心重情。", quote: "“喵~一起玩吗？不给糖就捣蛋哦！”", avatar: "image/maoyou.png" },
+            { id: "anby", name: "安比", game: "绝区零", vector: [20, 75, 35, 65], desc: "冷静高效，话少但可靠，默默守护。", quote: "“任务完成。下一个。”", avatar: "image/anbi.png" },
+            { id: "billy", name: "比利", game: "绝区零", vector: [85, 80, 30, 75], desc: "热血中二，真诚直率，是可靠的同伴。", quote: "“星徽骑士，参上！”", avatar: "image/bili.png" },
+            { id: "koleda", name: "珂蕾妲", game: "绝区零", vector: [70, 60, 65, 80], desc: "白祇重工老板，热血务实，守护员工。", quote: "“工地的安全，由我来守护！”", avatar: "image/kelaita.png" }
+        ];
 
         let userAnswers = {};
-        let currentChart = null;
+        let currentRadarChart = null;
 
+        // 渲染题目
         function renderQuestions() {
             const container = document.getElementById('questionsArea');
             container.innerHTML = '';
             QUESTIONS.forEach(q => {
                 const card = document.createElement('div');
                 card.className = 'question-card';
-                const weightTag = q.weight === 1.5 ? '<span class="badge-weight">⭐核心权重</span>' : '';
                 card.innerHTML = `
-                <div class="question-text">${q.text} ${weightTag}</div>
+                <div class="question-text">${q.text}</div>
                 <div class="options" data-qid="${q.id}">
                     ${q.opts.map(opt => `<div class="opt-btn" data-trait="${opt.trait}">${opt.txt}</div>`).join('')}
                 </div>
@@ -469,127 +496,161 @@
             document.getElementById('progressLabel').innerText = `${answered} / ${total} 次抉择`;
         }
 
-        function saveToLocal() { localStorage.setItem('myti_v2_answers', JSON.stringify(userAnswers)); }
+        function saveToLocal() { localStorage.setItem('myti_24_answers', JSON.stringify(userAnswers)); }
         function loadFromLocal() {
-            const saved = localStorage.getItem('myti_v2_answers');
+            const saved = localStorage.getItem('myti_24_answers');
             if (saved) { try { userAnswers = JSON.parse(saved); renderQuestions(); } catch (e) { userAnswers = {}; renderQuestions(); } }
             else { userAnswers = {}; renderQuestions(); }
         }
 
+        // 计分：每个维度独立，每道题1分，得到倾向原始分（0-6）
         function computeRawScores() {
             const scores = { soul: { R: 0, J: 0 }, surface: { C: 0, Y: 0 }, causality: { M: 0, S: 0 }, contract: { H: 0, D: 0 } };
             for (let q of QUESTIONS) {
                 const selected = userAnswers[q.id];
                 if (!selected) continue;
-                scores[q.dim][selected] += q.weight;
+                scores[q.dim][selected] += 1;
             }
             return scores;
         }
 
-        function resolveTieBreaks(scores, resolveFinal) {
+        // 弹窗处理平分 (返回处理后的scores)
+        function resolveTieBreaks(scores, onComplete) {
             let ties = [];
             for (let dim of ['soul', 'surface', 'causality', 'contract']) {
-                const [optA, optB] = DIM_KEYS[dim];
-                if (Math.abs(scores[dim][optA] - scores[dim][optB]) < 1e-6) ties.push({ dim, optA, optB });
+                const [optA, optB] = (dim === 'soul' ? ['R', 'J'] : (dim === 'surface' ? ['C', 'Y'] : (dim === 'causality' ? ['M', 'S'] : ['H', 'D'])));
+                if (scores[dim][optA] === scores[dim][optB]) ties.push({ dim, optA, optB });
             }
-            if (ties.length === 0) {
-                const final = {};
-                for (let dim of ['soul', 'surface', 'causality', 'contract']) {
-                    const [optA, optB] = DIM_KEYS[dim];
-                    final[dim] = scores[dim][optA] >= scores[dim][optB] ? optA : optB;
-                }
-                resolveFinal(final);
-                return;
-            }
+            if (ties.length === 0) { onComplete(scores); return; }
             const tie = ties[0];
-            const dimCn = DIM_NAME_CN[tie.dim];
-            const [nameA, nameB] = DIM_TRAIT_NAME[tie.dim];
+            const dimMap = { soul: '灵魂律动', surface: '表里之道', causality: '因果编织', contract: '契约归属' };
+            const traitMap = { soul: ['燃(R)', '静(J)'], surface: ['诚(C)', '隐(Y)'], causality: ['谋(M)', '随(S)'], contract: ['护(H)', '独(D)'] };
             const modal = document.getElementById('tieModal');
-            const modalOptionsDiv = document.getElementById('modalOptions');
-            document.getElementById('modalTitle').innerHTML = `⚖️ ${dimCn} · 倾向持平`;
-            document.getElementById('modalMessage').innerHTML = `检测到你「${dimCn}」的两种倾向持平，请选择你内心更偏向的那一方。`;
-            modalOptionsDiv.innerHTML = `
-            <button class="modal-btn confirm" data-choice="${tie.optA}">我更偏向「${nameA}」</button>
-            <button class="modal-btn" data-choice="${tie.optB}">我更偏向「${nameB}」</button>
+            const modalOptions = document.getElementById('modalOptions');
+            document.getElementById('modalTitle').innerHTML = `⚖️ ${dimMap[tie.dim]} · 势均力敌`;
+            document.getElementById('modalMessage').innerHTML = `两种力量在你体内势均力敌，请选择你内心更偏向的那一方。`;
+            modalOptions.innerHTML = `
+            <button class="modal-btn confirm" data-choice="${tie.optA}">我更偏向「${traitMap[tie.dim][0]}」</button>
+            <button class="modal-btn" data-choice="${tie.optB}">我更偏向「${traitMap[tie.dim][1]}」</button>
         `;
             modal.style.display = 'flex';
             const handler = (e) => {
                 if (e.target.classList.contains('modal-btn')) {
                     const choice = e.target.dataset.choice;
                     modal.style.display = 'none';
-                    scores[tie.dim][choice] += 0.001;
-                    modalOptionsDiv.removeEventListener('click', handler);
-                    resolveTieBreaks(scores, resolveFinal);
+                    scores[tie.dim][choice] += 0.001; // 微小增量打破平局
+                    modalOptions.removeEventListener('click', handler);
+                    resolveTieBreaks(scores, onComplete);
                 }
             };
-            modalOptionsDiv.addEventListener('click', handler);
+            modalOptions.addEventListener('click', handler);
         }
 
-        function generateCode(finalLetters) { return `${finalLetters.soul}${finalLetters.surface}${finalLetters.causality}${finalLetters.contract}`; }
+        // 计算用户向量 [燃%,诚%,谋%,护%] (每个分量0-100)
+        function computeUserVector(scores) {
+            const R = (scores.soul.R / 6) * 100;
+            const C = (scores.surface.C / 6) * 100;
+            const M = (scores.causality.M / 6) * 100;
+            const H = (scores.contract.H / 6) * 100;
+            return [R, C, M, H];
+        }
 
-        function showResult(code) {
-            const data = RESULTS_MAP[code];
-            if (!data) { document.getElementById('resultArea').innerHTML = `<div class="result-card">未找到对应人格，请重试</div>`; return; }
-            const scores = computeRawScores();
-            const charListHtml = data.characters.map(c => `
-            <div class="char-card">
-                <div class="char-avatar"><i class="fas fa-user-astronaut"></i></div>
-                <div class="char-name">${c.name}</div>
-                <div class="char-game">${c.game}</div>
-            </div>
-        `).join('');
-            const resultHtml = `
-            <div class="result-card" id="resultCard">
-                <div class="code-badge">${code}</div>
-                <div class="role-name">${data.title}</div>
-                <div class="character-slider">${charListHtml}</div>
-                <div class="quote">${data.desc}</div>
+        // 欧氏距离转相似度 (最大距离200)
+        function computeSimilarity(userVec, charVec) {
+            let distance = Math.hypot(
+                userVec[0] - charVec[0],
+                userVec[1] - charVec[1],
+                userVec[2] - charVec[2],
+                userVec[3] - charVec[3]
+            );
+            let maxDist = 200;
+            let similarity = ((maxDist - distance) / maxDist) * 100;
+            return Math.max(0, Math.min(100, similarity));
+        }
+
+        function findTopMatches(userVec, characters, topN = 3) {
+            return characters.map(c => ({
+                ...c,
+                similarity: computeSimilarity(userVec, c.vector)
+            })).sort((a, b) => b.similarity - a.similarity).slice(0, topN);
+        }
+
+        // 显示结果
+        function displayResult(userVec, topMatches) {
+            const main = topMatches[0];
+            const others = topMatches.slice(1);
+            let html = `
+            <div class="result-card">
+                <h3><i class="fas fa-chart-line"></i> 你的人格向量</h3>
+                <div class="vector-bars">
+                    <div class="vector-item"><span class="vector-label">🔥 燃</span><div class="vector-bar-bg"><div class="vector-bar-fill" style="width:${userVec[0]}%"></div></div><span>${Math.round(userVec[0])}%</span></div>
+                    <div class="vector-item"><span class="vector-label">✨ 诚</span><div class="vector-bar-bg"><div class="vector-bar-fill" style="width:${userVec[1]}%"></div></div><span>${Math.round(userVec[1])}%</span></div>
+                    <div class="vector-item"><span class="vector-label">📐 谋</span><div class="vector-bar-bg"><div class="vector-bar-fill" style="width:${userVec[2]}%"></div></div><span>${Math.round(userVec[2])}%</span></div>
+                    <div class="vector-item"><span class="vector-label">🛡️ 护</span><div class="vector-bar-bg"><div class="vector-bar-fill" style="width:${userVec[3]}%"></div></div><span>${Math.round(userVec[3])}%</span></div>
+                </div>
                 <div class="radar-container"><canvas id="radarCanvas" width="250" height="250"></canvas></div>
-                <button id="shareCanvasBtn" class="btn share-btn"><i class="fas fa-camera"></i> 铭刻命途 · 分享卡片</button>
-            </div>
+                <h3><i class="fas fa-star-of-life"></i> 你的灵魂共鸣 · TOP1</h3>
+                <div class="role-card">
+                    <div class="role-name">${main.name}</div>
+                    <img src="${main.avatar}" class="avatar">
+                    <div class="role-name">${main.name}</div>
+                    <div class="game-tag"><i class="fas fa-gamepad"></i> ${main.game}</div>
+                    <div class="quote">${main.quote}</div>
+                    <div>${main.desc}</div>
+                    <div class="similarity">✨ 灵魂相似度 ${main.similarity.toFixed(1)}% ✨</div>
+                </div>
         `;
-            document.getElementById('resultArea').innerHTML = resultHtml;
-            const dimScores = { R: scores.soul.R, C: scores.surface.C, M: scores.causality.M, H: scores.contract.H };
-            const ctx = document.getElementById('radarCanvas').getContext('2d');
-            if (currentChart) currentChart.destroy();
-            currentChart = new Chart(ctx, {
-                type: 'radar',
-                data: { labels: ['燃 (R)', '诚 (C)', '谋 (M)', '护 (H)'], datasets: [{ label: '倾向强度', data: [dimScores.R, dimScores.C, dimScores.M, dimScores.H], backgroundColor: 'rgba(230,180,34,0.3)', borderColor: '#ffcc66', borderWidth: 2, pointBackgroundColor: '#ffaa33', pointBorderColor: '#fff', pointRadius: 4 }] },
-                options: { responsive: true, maintainAspectRatio: true, scales: { r: { min: 0, max: 4.5, ticks: { stepSize: 1, color: '#e0d4ff' }, grid: { color: '#5f4c8b' } } }, plugins: { legend: { labels: { color: '#f5e7c8' } } } }
-            });
-            document.getElementById('shareCanvasBtn').addEventListener('click', () => generateShareCard(code, data));
-        }
+            if (others.length) {
+                html += `<h4>🌌 相近命途 · 其他可能</h4><div class="top3-grid">`;
+                others.forEach(other => {
+                    html += `<div class="mini-card"><img src="${other.avatar}"class="avatar"><i class="fas fa-user"></i> <strong>${other.name}</strong><div class="game-tag">${other.game}</div><div class="similarity">契合度 ${other.similarity.toFixed(1)}%</div></div>`;
+                });
+                html += `</div>`;
+                if (main.similarity - others[0].similarity <= 3) {
+                    html += `<p style="text-align:center; margin-top:0.5rem;"><i class="fas fa-hand-peace"></i> 你和 ${others[0].name} 也有着相似的灵魂！</p>`;
+                }
+            }
+            html += `<button id="shareResultBtn" class="btn share-btn"><i class="fas fa-camera"></i> 铭刻命途 · 分享卡片</button></div>`;
+            document.getElementById('resultArea').innerHTML = html;
 
-        function generateShareCard(code, data) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 600; canvas.height = 800;
-            const ctx = canvas.getContext('2d');
-            const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            grad.addColorStop(0, '#1a103c'); grad.addColorStop(1, '#0b0720');
-            ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#ffdf99';
-            for (let i = 0; i < 120; i++) ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 2, 2);
-            ctx.strokeStyle = '#e6b422'; ctx.lineWidth = 4; ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
-            ctx.font = 'bold 28px "Segoe UI"'; ctx.fillStyle = '#ffdd99'; ctx.fillText('✦ MYTI 命途之证 ✦', 120, 100);
-            ctx.font = 'bold 44px monospace'; ctx.fillStyle = '#ffc857'; ctx.fillText(code, 220, 190);
-            ctx.font = '28px "Segoe UI"'; ctx.fillStyle = '#ffe0aa'; ctx.fillText(data.title, 140, 280);
-            const sampleChar = data.characters[0].name;
-            ctx.font = '18px system-ui'; ctx.fillStyle = '#ccb9ff'; ctx.fillText(`代表：${sampleChar}`, 200, 340);
-            ctx.font = 'italic 15px system-ui'; ctx.fillStyle = '#efdfb7'; const shortDesc = data.desc.length > 70 ? data.desc.slice(0, 70) + "…" : data.desc;
-            ctx.fillText(shortDesc, 60, 480, 480);
-            ctx.font = 'bold 14px system-ui'; ctx.fillStyle = '#e6b422'; ctx.fillText('「米哈游宇宙 · 灵魂共鸣」', 180, 620);
-            ctx.font = '12px monospace'; ctx.fillStyle = '#7e6d9e'; ctx.fillText('MYTI 人格测试 · 独属于你的旅者铭文', 180, 740);
-            ctx.beginPath(); ctx.arc(300, 160, 35, 0, 2 * Math.PI); ctx.fillStyle = '#e6b422'; ctx.fill();
-            ctx.fillStyle = '#2c1e40'; ctx.font = 'bold 30px sans-serif'; ctx.fillText(data.title.charAt(0), 285, 178);
-            const link = document.createElement('a'); link.download = `MYTI_${code}.png`; link.href = canvas.toDataURL(); link.click();
+            // 雷达图
+            const ctx = document.getElementById('radarCanvas')?.getContext('2d');
+            if (ctx) {
+                if (currentRadarChart) currentRadarChart.destroy();
+                currentRadarChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: { labels: ['燃 (R)', '诚 (C)', '谋 (M)', '护 (H)'], datasets: [{ label: '你的人格向量', data: userVec, backgroundColor: 'rgba(230,180,34,0.3)', borderColor: '#ffcc66', borderWidth: 2, pointBackgroundColor: '#ffaa33', pointBorderColor: '#fff' }] },
+                    options: { responsive: true, maintainAspectRatio: true, scales: { r: { min: 0, max: 100, ticks: { stepSize: 20, color: '#ddd' }, grid: { color: '#5f4c8b' } } }, plugins: { legend: { labels: { color: '#f5e7c8' } } } }
+                });
+            }
+            document.getElementById('shareResultBtn')?.addEventListener('click', () => {
+                alert("分享卡片功能可截图保存 ✨ 您的人格向量已生成，感谢参与！");
+            });
         }
 
         function onSubmit() {
-            if (Object.keys(userAnswers).length !== QUESTIONS.length) { alert(`旅途未竟！已完成 ${Object.keys(userAnswers).length}/${QUESTIONS.length} 题`); return; }
+            const answeredCount = Object.keys(userAnswers).length;
+            if (answeredCount !== QUESTIONS.length) {
+                alert(`旅途未竟！已完成 ${answeredCount}/${QUESTIONS.length} 题，请继续抉择～`);
+                return;
+            }
             const rawScores = computeRawScores();
-            resolveTieBreaks(rawScores, (finalLetters) => { const code = generateCode(finalLetters); showResult(code); document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' }); });
+            resolveTieBreaks(rawScores, (finalScores) => {
+                const userVec = computeUserVector(finalScores);
+                const topMatches = findTopMatches(userVec, CHARACTERS, 3);
+                displayResult(userVec, topMatches);
+                document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+            });
         }
-        function resetTest() { localStorage.removeItem('myti_v2_answers'); userAnswers = {}; renderQuestions(); document.getElementById('resultArea').innerHTML = ''; if (currentChart) currentChart.destroy(); updateProgress(); }
+
+        function resetTest() {
+            localStorage.removeItem('myti_24_answers');
+            userAnswers = {};
+            renderQuestions();
+            document.getElementById('resultArea').innerHTML = '';
+            if (currentRadarChart) { currentRadarChart.destroy(); currentRadarChart = null; }
+            updateProgress();
+        }
 
         document.getElementById('submitBtn').addEventListener('click', onSubmit);
         document.getElementById('resetBtn').addEventListener('click', resetTest);
@@ -597,4 +658,4 @@
     </script>
 </body>
 
-</html
+</html>
